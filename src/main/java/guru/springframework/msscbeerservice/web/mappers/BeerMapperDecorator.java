@@ -24,7 +24,7 @@ public abstract class BeerMapperDecorator implements BeerMapper {
 
     @Override
     public BeerDto beerToBeerDto(Beer beer) {
-       return mapper.beerToBeerDto(beer);
+        return mapper.beerToBeerDto(beer);
     }
 
     @Override

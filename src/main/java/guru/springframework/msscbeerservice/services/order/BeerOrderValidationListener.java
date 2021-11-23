@@ -19,13 +19,13 @@ public class BeerOrderValidationListener {
     private final JmsTemplate jmsTemplate;
 
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_QUEUE)
-    public void listen(ValidateOrderRequest validateOrderRequest){
+    public void listen(ValidateOrderRequest validateOrderRequest) {
         Boolean isValid = validator.validateOrder(validateOrderRequest.getBeerOrder());
 
         jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESPONSE_QUEUE,
                 ValidateOrderResult.builder()
-                    .isValid(isValid)
-                    .orderId(validateOrderRequest.getBeerOrder().getId())
-                    .build());
+                        .isValid(isValid)
+                        .orderId(validateOrderRequest.getBeerOrder().getId())
+                        .build());
     }
 }

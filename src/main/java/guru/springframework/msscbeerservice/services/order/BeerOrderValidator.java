@@ -18,12 +18,12 @@ public class BeerOrderValidator {
 
     private final BeerRepository beerRepository;
 
-    public Boolean validateOrder(BeerOrderDto beerOrder){
+    public Boolean validateOrder(BeerOrderDto beerOrder) {
 
         AtomicInteger beersNotFound = new AtomicInteger();
 
         beerOrder.getBeerOrderLines().forEach(orderline -> {
-            if(beerRepository.findByUpc(orderline.getUpc()) == null){
+            if (beerRepository.findByUpc(orderline.getUpc()) == null) {
                 beersNotFound.incrementAndGet();
             }
         });
