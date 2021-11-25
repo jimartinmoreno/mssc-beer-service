@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 /**
- * Created by jt on 2019-05-17.
+ * Solo se ejecuta si no hay beers en la BD creados con el script data.sql
  */
 @RequiredArgsConstructor
 @Component

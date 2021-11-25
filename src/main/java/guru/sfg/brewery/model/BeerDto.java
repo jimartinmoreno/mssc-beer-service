@@ -1,10 +1,7 @@
 package guru.sfg.brewery.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,13 +13,14 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt on 2019-05-12.
+ * Implementa Serializable para la gestion de la cache
  */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class BeerDto implements Serializable {
 
     static final long serialVersionUID = -5815566940065181210L;

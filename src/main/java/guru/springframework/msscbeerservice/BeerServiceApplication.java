@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringBootApplication
-public class MsscBeerServiceApplication {
+public class BeerServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MsscBeerServiceApplication.class, args);
+        SpringApplication.run(BeerServiceApplication.class, args);
     }
 
 }

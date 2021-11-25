@@ -3,11 +3,13 @@ package guru.springframework.msscbeerservice.web.mappers;
 import guru.sfg.brewery.model.BeerDto;
 import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.services.inventory.BeerInventoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by jt on 2019-06-08.
  */
+@Slf4j
 public abstract class BeerMapperDecorator implements BeerMapper {
     private BeerInventoryService beerInventoryService;
     private BeerMapper mapper;
@@ -31,6 +33,7 @@ public abstract class BeerMapperDecorator implements BeerMapper {
     public BeerDto beerToBeerDtoWithInventory(Beer beer) {
         BeerDto dto = mapper.beerToBeerDto(beer);
         dto.setQuantityOnHand(beerInventoryService.getOnhandInventory(beer.getId()));
+        log.debug("beerToBeerDtoWithInventory dto: " + dto);
         return dto;
     }
 

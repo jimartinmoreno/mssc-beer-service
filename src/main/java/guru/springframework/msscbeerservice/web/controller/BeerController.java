@@ -5,6 +5,7 @@ import guru.sfg.brewery.model.BeerPagedList;
 import guru.sfg.brewery.model.BeerStyleEnum;
 import guru.springframework.msscbeerservice.services.BeerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/")
 @RestController
+@Slf4j
 public class BeerController {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
@@ -31,11 +33,11 @@ public class BeerController {
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
                                                    @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
-                                                   @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand) {
+                                                   @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
 
-        if (showInventoryOnHand == null) {
-            showInventoryOnHand = false;
-        }
+//        if (showInventoryOnHand == null) {
+//            showInventoryOnHand = false;
+//        }
 
         if (pageNumber == null || pageNumber < 0) {
             pageNumber = DEFAULT_PAGE_NUMBER;
@@ -47,15 +49,16 @@ public class BeerController {
 
         BeerPagedList beerList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize), showInventoryOnHand);
 
+        log.debug("listBeers - beerList: " + beerList.getContent());
         return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
 
     @GetMapping("beer/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable("beerId") UUID beerId,
-                                               @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand) {
-        if (showInventoryOnHand == null) {
-            showInventoryOnHand = false;
-        }
+                                               @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
+//        if (showInventoryOnHand == null) {
+//            showInventoryOnHand = false;
+//        }
 
         return new ResponseEntity<>(beerService.getById(beerId, showInventoryOnHand), HttpStatus.OK);
     }

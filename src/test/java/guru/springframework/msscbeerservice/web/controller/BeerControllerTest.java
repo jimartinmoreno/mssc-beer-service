@@ -21,6 +21,13 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * @WebMvcTest
+ * Annotation that can be used for a Spring MVC test that focuses only on Spring MVC components.
+ * Using this annotation will disable full auto-configuration and instead apply only configuration relevant to MVC tests
+ * (i.e. @Controller, @ControllerAdvice, @JsonComponent, Converter/GenericConverter, Filter, WebMvcConfigurer
+ * and HandlerMethodArgumentResolver beans but not @Component, @Service or @Repository beans).
+ */
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 

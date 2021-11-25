@@ -8,38 +8,42 @@ import guru.springframework.msscbeerservice.repositories.BeerRepository;
 import guru.springframework.msscbeerservice.web.controller.NotFoundException;
 import guru.springframework.msscbeerservice.web.mappers.BeerMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Created by jt on 2019-06-06.
  */
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
-    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false ")
+    /**
+     * @Cacheable Annotation indicating that the result of invoking a method (or all methods in a class) can be cached.
+     */
+    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false")
     @Override
     public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
 
         BeerPagedList beerPagedList;
         Page<Beer> beerPage;
 
-        if (!StringUtils.isEmpty(beerName) && !StringUtils.isEmpty(beerStyle)) {
+        if (!ObjectUtils.isEmpty(beerName) && !ObjectUtils.isEmpty(beerStyle)) {
             //search both
             beerPage = beerRepository.findAllByBeerNameAndBeerStyle(beerName, beerStyle, pageRequest);
-        } else if (!StringUtils.isEmpty(beerName) && StringUtils.isEmpty(beerStyle)) {
+        } else if (!ObjectUtils.isEmpty(beerName) && ObjectUtils.isEmpty(beerStyle)) {
             //search beer_service name
             beerPage = beerRepository.findAllByBeerName(beerName, pageRequest);
-        } else if (StringUtils.isEmpty(beerName) && !StringUtils.isEmpty(beerStyle)) {
+        } else if (ObjectUtils.isEmpty(beerName) && !ObjectUtils.isEmpty(beerStyle)) {
             //search beer_service style
             beerPage = beerRepository.findAllByBeerStyle(beerStyle, pageRequest);
         } else {
@@ -51,27 +55,27 @@ public class BeerServiceImpl implements BeerService {
                     .getContent()
                     .stream()
                     .map(beerMapper::beerToBeerDtoWithInventory)
-                    .collect(Collectors.toList()),
-                    PageRequest
-                            .of(beerPage.getPageable().getPageNumber(),
-                                    beerPage.getPageable().getPageSize()),
+                    .toList(),
+//                    PageRequest.of(beerPage.getPageable().getPageNumber(),
+//                            beerPage.getPageable().getPageSize()),
+                    beerPage.getPageable(),
                     beerPage.getTotalElements());
         } else {
             beerPagedList = new BeerPagedList(beerPage
                     .getContent()
                     .stream()
                     .map(beerMapper::beerToBeerDto)
-                    .collect(Collectors.toList()),
-                    PageRequest
-                            .of(beerPage.getPageable().getPageNumber(),
-                                    beerPage.getPageable().getPageSize()),
+                    .toList(),
+//                    PageRequest.of(beerPage.getPageable().getPageNumber(),
+//                            beerPage.getPageable().getPageSize()),
+                    beerPage.getPageable(),
                     beerPage.getTotalElements());
         }
-
+        log.debug("listBeers - beerPagedList: " + beerPagedList.getContent());
         return beerPagedList;
     }
 
-    @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false ")
+    @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false")
     @Override
     public BeerDto getById(UUID beerId, Boolean showInventoryOnHand) {
         if (showInventoryOnHand) {
