@@ -7,13 +7,8 @@ CREATE
 CREATE
     USER IF NOT EXISTS `beer_service`@`%` IDENTIFIED WITH mysql_native_password BY 'password';
 GRANT
-    SELECT,
-        INSERT
-        ,
-        UPDATE,
+    SELECT, INSERT , UPDATE,
         DELETE, CREATE, DROP, REFERENCES, INDEX, ALTER, EXECUTE, CREATE VIEW, SHOW VIEW,
-        CREATE
-        ROUTINE, ALTER ROUTINE
-        , EVENT, TRIGGER ON `beerservice`.* TO `beer_service`@`%`;
+        CREATE ROUTINE, ALTER ROUTINE, EVENT, TRIGGER ON `beerservice`.* TO `beer_service`@`%`;
 FLUSH
     PRIVILEGES;
