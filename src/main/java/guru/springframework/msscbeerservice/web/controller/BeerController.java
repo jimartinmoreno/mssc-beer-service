@@ -3,12 +3,13 @@ package guru.springframework.msscbeerservice.web.controller;
 import guru.sfg.brewery.model.BeerDto;
 import guru.sfg.brewery.model.BeerPagedList;
 import guru.sfg.brewery.model.BeerStyleEnum;
-import guru.springframework.msscbeerservice.services.BeerService;
+import guru.springframework.msscbeerservice.services.beer.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,25 +57,34 @@ public class BeerController {
     @GetMapping("beer/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable("beerId") UUID beerId,
                                                @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
-//        if (showInventoryOnHand == null) {
-//            showInventoryOnHand = false;
-//        }
-
+        //        if (showInventoryOnHand == null) {
+        //            showInventoryOnHand = false;
+        //        }
+        log.info(" getBeerById - beerId: " + beerId);
         return new ResponseEntity<>(beerService.getById(beerId, showInventoryOnHand), HttpStatus.OK);
     }
 
     @GetMapping("beerUpc/{upc}")
     public ResponseEntity<BeerDto> getBeerByUpc(@PathVariable("upc") String upc) {
+        log.info(" updateBeerById - upc: " + upc);
         return new ResponseEntity<>(beerService.getByUpc(upc), HttpStatus.OK);
     }
 
     @PostMapping(path = "beer")
-    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
+    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto, Errors errors) {
+        log.info(" saveNewBeer - beerDto: " + beerDto);
+        log.info(" saveNewBeer - errors: " + errors.hasErrors());
+        errors.getAllErrors().forEach(System.out::println);
         return new ResponseEntity<>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
 
     @PutMapping("beer/{beerId}")
-    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto) {
+    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto, Errors errors) {
+        log.info(" updateBeerById - beerId: " + beerId);
+        log.info(" updateBeerById - beerDto: " + beerDto);
+        log.info(" updateBeerById - errors: " + errors.hasErrors());
+        errors.getAllErrors().forEach(System.out::println);
+
         return new ResponseEntity<>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
     }
 

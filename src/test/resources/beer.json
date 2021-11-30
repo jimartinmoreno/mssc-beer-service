@@ -1,0 +1,11 @@
+{
+  "id": "1361c7e3-be5e-4811-96db-3920bc166c37",
+  "version": 0,
+  "createdDate": null,
+  "lastModifiedDate": null,
+  "beerName": "My Beer",
+  "beerStyle": "ALE",
+  "upc": "8631863391731",
+  "price": "12.99",
+  "quantityOnHand": null
+}

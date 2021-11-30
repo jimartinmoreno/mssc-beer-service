@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.services;
+package guru.springframework.msscbeerservice.services.beer;
 
 import guru.sfg.brewery.model.BeerDto;
 import guru.sfg.brewery.model.BeerPagedList;
@@ -78,11 +78,14 @@ public class BeerServiceImpl implements BeerService {
     @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false")
     @Override
     public BeerDto getById(UUID beerId, Boolean showInventoryOnHand) {
+        log.debug("getById - beerId: " + beerId);
+        log.debug("getById - showInventoryOnHand: " + showInventoryOnHand);
         if (showInventoryOnHand) {
             return beerMapper.beerToBeerDtoWithInventory(
                     beerRepository.findById(beerId).orElseThrow(NotFoundException::new)
             );
         } else {
+            log.debug("getById - beerRepository.findById: " + beerRepository.findById(beerId));
             return beerMapper.beerToBeerDto(
                     beerRepository.findById(beerId).orElseThrow(NotFoundException::new)
             );
@@ -91,11 +94,17 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public BeerDto saveNewBeer(BeerDto beerDto) {
-        return beerMapper.beerToBeerDto(beerRepository.save(beerMapper.beerDtoToBeer(beerDto)));
+        log.debug("saveNewBeer - beerDto: " + beerDto);
+        Beer beerTosave = beerMapper.beerDtoToBeer(beerDto);
+        beerTosave.setMinOnHand(0);
+        beerTosave.setQuantityToBrew(0);
+        return beerMapper.beerToBeerDto(beerRepository.save(beerTosave));
     }
 
     @Override
     public BeerDto updateBeer(UUID beerId, BeerDto beerDto) {
+        log.debug("updateBeer - beerId: " + beerId);
+        log.debug("updateBeer - beerDto: " + beerDto);
         Beer beer = beerRepository.findById(beerId).orElseThrow(NotFoundException::new);
 
         beer.setBeerName(beerDto.getBeerName());
@@ -109,6 +118,7 @@ public class BeerServiceImpl implements BeerService {
     @Cacheable(cacheNames = "beerUpcCache")
     @Override
     public BeerDto getByUpc(String upc) {
+        log.debug("getByUpc - upc: " + upc);
         return beerMapper.beerToBeerDto(beerRepository.findByUpc(upc));
     }
 }
