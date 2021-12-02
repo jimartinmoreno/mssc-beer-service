@@ -33,6 +33,7 @@ public class BeerLoader implements CommandLineRunner {
     }
 
     private void loadBeerObjects() {
+        log.info("running loadBeerObjects: " + beerRepository.count());
         Beer b1 = Beer.builder()
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA.name())
@@ -60,8 +61,13 @@ public class BeerLoader implements CommandLineRunner {
                 .upc(BEER_3_UPC)
                 .build();
 
-        beerRepository.save(b1);
-        beerRepository.save(b2);
-        beerRepository.save(b3);
+        b1 = beerRepository.save(b1);
+        b2 = beerRepository.save(b2);
+        b3 = beerRepository.save(b3);
+
+        log.info("Created beer : " + b1);
+        log.info("Created beer : " + b2);
+        log.info("Created beer : " + b3);
+
     }
 }

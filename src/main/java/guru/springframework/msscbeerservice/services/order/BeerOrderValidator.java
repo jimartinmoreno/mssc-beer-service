@@ -1,6 +1,6 @@
 package guru.springframework.msscbeerservice.services.order;
 
-import guru.sfg.brewery.model.events.BeerOrderDto;
+import guru.sfg.brewery.model.BeerOrderDto;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

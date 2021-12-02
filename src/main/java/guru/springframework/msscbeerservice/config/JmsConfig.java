@@ -8,7 +8,7 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 /**
- * Created by jt on 2019-07-20.
+ * Configuramos la configuración JMS y definimos un messageConverter para los mensajes(events) que publicamos en las colas
  */
 @Configuration
 public class JmsConfig {

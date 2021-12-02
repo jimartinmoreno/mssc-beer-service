@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * Created by jt on 2019-07-21.
+ * Lo necesitamos para que se ejecute el servicio BrewingService cada cierto intervalo de manera asincrona
  */
 @EnableAsync
 @EnableScheduling

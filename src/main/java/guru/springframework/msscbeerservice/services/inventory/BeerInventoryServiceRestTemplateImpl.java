@@ -51,7 +51,8 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
         ResponseEntity<List<BeerInventoryDto>> responseEntity = restTemplate
                 .exchange(beerInventoryServiceHost + INVENTORY_PATH, HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<BeerInventoryDto>>() {},
+                        new ParameterizedTypeReference<List<BeerInventoryDto>>() {
+                        },
                         beerId);
 
         //sum from inventory list

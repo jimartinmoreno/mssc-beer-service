@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Test de integración que carga todo el contexto y prueba end to end el controlador con el servicio real
@@ -32,6 +31,6 @@ class BeerControllerSpyTest {
     @Test
     void getRealBeerById() throws Exception {
         ResponseEntity<BeerDto> responseEntity = controller.getBeerById(UUID.fromString("0a818933-087d-47f2-ad83-2f986ed087eb"), false);
-        assertThat("Mango Bobs").isEqualTo(responseEntity.getBody().getBeerName());
+        assertThat("Pinball Porter").isEqualTo(responseEntity.getBody().getBeerName());
     }
 }
