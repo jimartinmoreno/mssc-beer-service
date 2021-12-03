@@ -20,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString(callSuper = true)
 public class Beer {
 
     @Id
