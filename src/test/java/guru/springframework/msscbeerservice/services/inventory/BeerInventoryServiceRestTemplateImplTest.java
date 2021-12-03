@@ -29,6 +29,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 /**
  * @RestClientTest Annotation for a Spring rest client test that focuses only on beans that use RestTemplateBuilder.
  * Using this annotation will disable full auto-configuration and instead apply only configuration relevant to rest client tests
+ *
+ * @AutoConfigureJsonTesters Lo necesitas para poder usar los JacksonTester
  */
 //@Disabled // utility for manual testing
 @RestClientTest(BeerInventoryService.class)
@@ -82,6 +84,7 @@ class BeerInventoryServiceRestTemplateImplTest {
 
     /**
      * Es un test de integración que llama al servicio real desde un cliente TestRestTemplate
+     * Necesita estar arrancado el servicio destino
      */
     @Test
     void restTemplateClientInventoryArrayTest() throws IOException {
@@ -104,7 +107,7 @@ class BeerInventoryServiceRestTemplateImplTest {
         System.out.println("ContentType = " + responseEntity.getHeaders().getContentType());
         //assertThat(responseEntity.responseEntity()).hasHost("other.example.com");
 
-        this.jsonArray.write(responseEntity.getBody());
+
 
         String resultObtained = objectMapper.writeValueAsString(responseEntity.getBody());
         System.out.println("resultObtained = " + resultObtained);
@@ -119,6 +122,8 @@ class BeerInventoryServiceRestTemplateImplTest {
         assertThat(responseEntity.getBody()[0].getQuantityOnHand()).isEqualTo(200);
 
         //assertThat("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b").isEqualTo(JsonPath.read(resultObtained, "$.[0].id"));
+
+        //this.jsonArray.write(responseEntity.getBody());
 
         AssertionsForInterfaceTypes.assertThat(this.jsonArray.write(responseEntity.getBody())).hasJsonPathStringValue("@.[0].id");
         AssertionsForInterfaceTypes.assertThat(this.jsonArray.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(200);
@@ -153,7 +158,7 @@ class BeerInventoryServiceRestTemplateImplTest {
         System.out.println("ContentType = " + responseEntity.getHeaders().getContentType());
         //assertThat(responseEntity.responseEntity()).hasHost("other.example.com");
 
-        this.jsonList.write(responseEntity.getBody());
+
 
         String resultObtained = objectMapper.writeValueAsString(responseEntity.getBody());
         System.out.println("resultObtained = " + resultObtained);
@@ -168,9 +173,9 @@ class BeerInventoryServiceRestTemplateImplTest {
         assertThat(responseEntity.getBody().get(0).getQuantityOnHand()).isEqualTo(200);
 
         //assertThat("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b").isEqualTo(JsonPath.read(resultObtained, "$.[0].id"));
+        //this.jsonList.write(responseEntity.getBody());
 
         AssertionsForInterfaceTypes.assertThat(this.jsonList.write(responseEntity.getBody())).hasJsonPathStringValue("@.[0].id");
         AssertionsForInterfaceTypes.assertThat(this.jsonList.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(200);
-
     }
 }
