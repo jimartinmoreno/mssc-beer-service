@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.services.order;
+package guru.springframework.msscbeerservice.services.listeners.order;
 
 import guru.sfg.brewery.model.events.ValidateOrderRequest;
 import guru.sfg.brewery.model.events.ValidateOrderResult;
@@ -8,9 +8,6 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by jt on 12/2/19.
- */
 @RequiredArgsConstructor
 @Component
 public class BeerOrderValidationListener {

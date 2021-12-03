@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.services.order;
+package guru.springframework.msscbeerservice.services.listeners.order;
 
 import guru.sfg.brewery.model.BeerOrderDto;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
@@ -8,9 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by jt on 12/2/19.
- */
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -18,12 +15,12 @@ public class BeerOrderValidator {
 
     private final BeerRepository beerRepository;
 
-    public Boolean validateOrder(BeerOrderDto beerOrder) {
+    public Boolean validateOrder(BeerOrderDto beerOrderDto) {
 
         AtomicInteger beersNotFound = new AtomicInteger();
 
-        beerOrder.getBeerOrderLines().forEach(orderline -> {
-            if (beerRepository.findByUpc(orderline.getUpc()) == null) {
+        beerOrderDto.getBeerOrderLines().forEach(orderlineDto -> {
+            if (beerRepository.findByUpc(orderlineDto.getUpc()) == null) {
                 beersNotFound.incrementAndGet();
             }
         });
