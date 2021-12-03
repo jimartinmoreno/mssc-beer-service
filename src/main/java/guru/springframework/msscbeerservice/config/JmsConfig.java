@@ -18,12 +18,16 @@ public class JmsConfig {
     public static final String VALIDATE_ORDER_QUEUE = "validate-order";
     public static final String VALIDATE_ORDER_RESPONSE_QUEUE = "validate-order-response";
 
+    /**
+     * @param objectMapper Le decimos que use el objectMapper de Spring para evitar errores de mapeo con fechas
+     * @return MessageConverter
+     */
     @Bean // Serialize message content to json using TextMessage
     public MessageConverter jacksonJmsMessageConverter(ObjectMapper objectMapper) {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
-        converter.setObjectMapper(objectMapper);
+        converter.setObjectMapper(objectMapper); // Le decimos que use el objectMapper de Spring para evitar errores de
         return converter;
     }
 }

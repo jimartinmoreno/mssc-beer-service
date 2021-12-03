@@ -116,12 +116,12 @@ class BeerInventoryServiceRestTemplateImplTest {
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody().length).isPositive();
         assertThat(responseEntity.getBody()[0].getBeerId()).isEqualTo(UUID.fromString("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b"));
-        assertThat(responseEntity.getBody()[0].getQuantityOnHand()).isEqualTo(5);
+        assertThat(responseEntity.getBody()[0].getQuantityOnHand()).isEqualTo(200);
 
         //assertThat("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b").isEqualTo(JsonPath.read(resultObtained, "$.[0].id"));
 
         AssertionsForInterfaceTypes.assertThat(this.jsonArray.write(responseEntity.getBody())).hasJsonPathStringValue("@.[0].id");
-        AssertionsForInterfaceTypes.assertThat(this.jsonArray.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(5);
+        AssertionsForInterfaceTypes.assertThat(this.jsonArray.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(200);
 
     }
 
@@ -165,12 +165,12 @@ class BeerInventoryServiceRestTemplateImplTest {
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody().size()).isPositive();
         assertThat(responseEntity.getBody().get(0).getBeerId()).isEqualTo(UUID.fromString("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b"));
-        assertThat(responseEntity.getBody().get(0).getQuantityOnHand()).isEqualTo(5);
+        assertThat(responseEntity.getBody().get(0).getQuantityOnHand()).isEqualTo(200);
 
         //assertThat("45772dd4-3e82-4d49-9951-4b4d8d3a0a1b").isEqualTo(JsonPath.read(resultObtained, "$.[0].id"));
 
         AssertionsForInterfaceTypes.assertThat(this.jsonList.write(responseEntity.getBody())).hasJsonPathStringValue("@.[0].id");
-        AssertionsForInterfaceTypes.assertThat(this.jsonList.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(5);
+        AssertionsForInterfaceTypes.assertThat(this.jsonList.write(responseEntity.getBody())).extractingJsonPathNumberValue("@.[0].quantityOnHand").isEqualTo(200);
 
     }
 }

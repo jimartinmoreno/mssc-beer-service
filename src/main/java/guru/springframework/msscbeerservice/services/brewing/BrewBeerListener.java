@@ -24,14 +24,19 @@ public class BrewBeerListener {
     private final BeerRepository beerRepository;
     private final JmsTemplate jmsTemplate;
 
-    @Transactional
+    /**
+     * @Transactional Lo necesitamos para que no nos de errores de lazy initialization al hacer (beer.getQuantityToBrew()
+     * ya que no tenemos una session
+     * @param event
+     */
+    @Transactional // Lo necesitamos para que no nos de errores de lazy initialization al hacer (beer.getQuantityToBrew()
     @JmsListener(destination = JmsConfig.BREWING_REQUEST_QUEUE)
     public void listen(BrewBeerEvent event) {
         BeerDto beerDto = event.getBeerDto();
         Beer beer = beerRepository.getById(beerDto.getId());
         beerDto.setQuantityOnHand(beer.getQuantityToBrew());
         NewInventoryEvent newInventoryEvent = new NewInventoryEvent(beerDto);
-        log.debug("Brewed beer " + beer.getMinOnHand() + " : QOH: " + beerDto.getQuantityOnHand());
+        log.debug("Brewed beer " + beer.getMinOnHand() + " , QOH: " + beerDto.getQuantityOnHand());
         jmsTemplate.convertAndSend(JmsConfig.NEW_INVENTORY_QUEUE, newInventoryEvent);
     }
 }
