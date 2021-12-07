@@ -17,10 +17,9 @@ import java.util.UUID;
  * (e.g. for autowiring into another component). If SC LoadBalancer is available it will be used to load balance
  * the backend requests, and the load balancer can be configured using the same name (i.e. value) as the feign client.
  */
-@FeignClient(name = "inventory-service",
-//        url = "http://localhost:9090",
-        fallback = InventoryServiceFeignClientFailover.class,
+@FeignClient(name = "inventory-service", fallback = BeerInventoryServiceFeignClientFailover.class,
         configuration = FeignClientConfig.class)
+//        url = "http://localhost:9090",
 public interface InventoryServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = BeerInventoryServiceConstants.INVENTORY_PATH)
