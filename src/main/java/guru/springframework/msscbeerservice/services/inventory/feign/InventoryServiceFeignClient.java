@@ -19,7 +19,10 @@ import java.util.UUID;
  */
 @FeignClient(name = "inventory-service", fallback = BeerInventoryServiceFeignClientFailover.class,
         configuration = FeignClientConfig.class)
-//        url = "http://localhost:9090",
+
+//@FeignClient(name = "inventory-service", url = "http://localhost:9090", fallback = BeerInventoryServiceFeignClientFailover.class,
+//        configuration = FeignClientConfig.class)
+
 public interface InventoryServiceFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = BeerInventoryServiceConstants.INVENTORY_PATH)
