@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.services.inventory;
+package guru.springframework.msscbeerservice.services.inventory.feign;
 
 import guru.springframework.msscbeerservice.services.inventory.model.BeerInventoryDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-/**
- * Created by jt on 3/14/20.
- */
 @FeignClient(name = "inventory-failover")
 public interface InventoryFailoverFeignClient {
 

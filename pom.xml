@@ -14,6 +14,18 @@
     <name>mssc-beer-service</name>
     <description>MSSC Beer Service</description>
 
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--                <version>2020.0.3</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
+
     <dependencies>
 
         <dependency>
@@ -21,11 +33,17 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>3.0.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
             <version>3.0.4</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--        </dependency>-->
 
         <!-- Configuración Cache -->
         <dependency>
@@ -71,19 +89,9 @@
             <scope>test</scope>
         </dependency>
 
-        <!--   SI DESCOMENTAMOS ESTAS DEPENDENCIAS DEJA SE USAR EL BROKER DE ARTEMIS
-                Y USARIA EL BROKER DE ACTIVE MQ EMBEBIDO    -->
-        <!--        <dependency>-->
-        <!--            <groupId>javax.jms</groupId>-->
-        <!--            <artifactId>javax.jms-api</artifactId>-->
-        <!--            <version>2.0.1</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--
-           JmsOperations requires the javax jms classes for some of its methods, so you need them in your build path.
-       -->
-        <!--            <groupId>org.apache.activemq</groupId>-->
-        <!--            <artifactId>activemq-broker</artifactId>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
     </dependencies>
 </project>

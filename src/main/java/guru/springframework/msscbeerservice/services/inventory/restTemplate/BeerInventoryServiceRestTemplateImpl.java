@@ -1,5 +1,7 @@
-package guru.springframework.msscbeerservice.services.inventory;
+package guru.springframework.msscbeerservice.services.inventory.restTemplate;
 
+import guru.springframework.msscbeerservice.services.inventory.BeerInventoryService;
+import guru.springframework.msscbeerservice.services.inventory.BeerInventoryServiceConstants;
 import guru.springframework.msscbeerservice.services.inventory.model.BeerInventoryDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,15 +19,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Created by jt on 2019-06-07.
+ * Solo se usa si no usamos service dicovery
  */
 @Profile("!local-discovery")
 @Slf4j
 @ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = true)
 @Component
-public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService {
+public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService, BeerInventoryServiceConstants {
 
-    public static final String INVENTORY_PATH = "/api/v1/beer/{beerId}/inventory";
     private final RestTemplate restTemplate;
 
     private String beerInventoryServiceHost;
@@ -49,7 +50,7 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
 
         log.debug("Calling Inventory Service");
         ResponseEntity<List<BeerInventoryDto>> responseEntity = restTemplate
-                .exchange(beerInventoryServiceHost + INVENTORY_PATH, HttpMethod.GET,
+                .exchange(beerInventoryServiceHost + BeerInventoryServiceConstants.INVENTORY_PATH, HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<BeerInventoryDto>>() {
                         },

@@ -1,5 +1,6 @@
-package guru.springframework.msscbeerservice.services.inventory;
+package guru.springframework.msscbeerservice.services.inventory.feign;
 
+import guru.springframework.msscbeerservice.services.inventory.BeerInventoryService;
 import guru.springframework.msscbeerservice.services.inventory.model.BeerInventoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,13 +13,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Created by jt on 3/7/20.
+ * Solo se usa si usamos service dicovery
  */
+@Profile("local-discovery")
 @Slf4j
 @RequiredArgsConstructor
-@Profile("local-discovery")
 @Service
-public class BeerInventoryServiceFeign implements BeerInventoryService {
+public class BeerInventoryServiceFeignImpl implements BeerInventoryService {
 
     private final InventoryServiceFeignClient inventoryServiceFeignClient;
 

@@ -4,6 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * @EnableFeignClients Scans for interfaces that declare they are feign clients (via FeignClient @FeignClient).
+ * Configures component scanning  * directives for use with org.springframework.context.annotation.Configuration
+ * @Configuration classes.
+ */
 @EnableFeignClients
 @SpringBootApplication
 public class BeerServiceApplication {
