@@ -19,11 +19,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Solo se usa si no usamos service dicovery
+ * @Profile("!local-discovery") Solo se usa si no usamos service dicovery
+ * ignoreUnknownFields = true ->Flag to indicate that when binding to this object unknown fields should be ignored. An unknown field could be a sign of a mistake in the Properties.
  */
 @Profile("!local-discovery")
 @Slf4j
-@ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = true) //
 @Component
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService, BeerInventoryServiceConstants {
 
@@ -38,7 +39,9 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
     public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder,
                                                 @Value("${sfg.brewery.inventory-user}") String inventoryUser,
                                                 @Value("${sfg.brewery.inventory-password}") String inventoryPassword) {
-        this.restTemplate = restTemplateBuilder.basicAuthentication(inventoryUser, inventoryPassword).build();
+
+        this.restTemplate = restTemplateBuilder
+                .basicAuthentication(inventoryUser, inventoryPassword).build();
     }
 
     public void setBeerInventoryServiceHost(String beerInventoryServiceHost) {
