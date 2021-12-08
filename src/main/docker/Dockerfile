@@ -1,9 +1,9 @@
-FROM openjdk:11-jre-slim as builder
+FROM openjdk:17.0.1-slim-buster as builder
 WORKDIR application
 ADD maven/${project.build.finalName}.jar ${project.build.finalName}.jar
 RUN java -Djarmode=layertools -jar ${project.build.finalName}.jar extract
 
-FROM openjdk:11-jre-slim
+FROM openjdk:17.0.1-slim-buster
 LABEL PROJECT_NAME=${project.artifactId} \
       PROJECT=${project.id}
 
