@@ -1,0 +1,130 @@
+version: '3.8'
+services:
+  sql-server:
+    container_name: 'mysql_dc'
+    image: jimartin7/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root' # TODO: Change this
+    volumes:
+      - /home/nacho/mysql/data:/var/lib/mysql
+  jms-server:
+    container_name: 'activemq_artemis_dc'
+    image: vromero/activemq-artemis
+    ports:
+      - 8161:8161
+      - 61616:61616
+    environment:
+      ARTEMIS_USERNAME: admin
+      ARTEMIS_PASSWORD: admin
+  zipkin:
+    container_name: 'zipkin_dc'
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+  eureka:
+    container_name: 'mssc-brewery-eureka_dc'
+    image: jimartin7/mssc-brewery-eureka
+    ports:
+      - 8761:8761
+  mssc-gateway:
+    container_name: 'mssc-gateway_dc'
+    image: jimartin7/mssc-brewery-gateway
+    ports:
+      - 9090:9090
+    depends_on:
+      - eureka
+      - zipkin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+  config-server:
+    container_name: 'mssc-config-server_dc'
+    image: jimartin7/mssc-config-server
+    ports:
+      - 8888:8888
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_PROFILES_ACTIVE: local-discovery
+  inventory-failover:
+    container_name: 'inventory-failover_dc'
+    image: jimartin7/mssc-inventory-failover
+    ports:
+      - 8083:8083
+    depends_on:
+      - eureka
+      - zipkin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+  inventory-service:
+    container_name: 'beer-inventory-service_dc'
+    image: jimartin7/mssc-beer-inventory-service
+    ports:
+      - 8082:8082
+    depends_on:
+      - sql-server
+      - eureka
+      - config-server
+      - jms-server
+      - zipkin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+      SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      SPRING_DATASOURCE_URL: jdbc:mysql://sql-server:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_CLOUD_CONFIG_ENABLED: 'true'
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+  beer-service:
+    container_name: 'beer-service_dc'
+    image: jimartin7/mssc-beer-service
+    ports:
+      - 8080:8080
+    depends_on:
+      - sql-server
+      - eureka
+      - config-server
+      - jms-server
+      - inventory-failover
+#      - inventory-service
+      - zipkin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+      SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      SPRING_DATASOURCE_URL: jdbc:mysql://sql-server:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SFG_BREWERY_BEERINVENTORYSERVICEHOST: http://inventory-service:8082
+      SPRING_CLOUD_CONFIG_ENABLED: 'true'
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+  beer-order-service:
+    container_name: 'beer-order-service_dc'
+    image: jimartin7/mssc-beer-order-service
+    ports:
+      - 8081:8081
+    depends_on:
+      - sql-server
+      - eureka
+      - config-server
+      - jms-server
+      - beer-service
+      #      - inventory-service
+      - zipkin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+      SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      SPRING_DATASOURCE_URL: jdbc:mysql://sql-server:3306/beerorderservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SFG_BREWERY_BEERSERVICEHOST: http://beer-service:8080
+      SPRING_CLOUD_CONFIG_ENABLED: 'true'
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
