@@ -38,7 +38,9 @@ services:
       - eureka
       - zipkin
     environment:
+      SPRING_PROFILES_ACTIVE: local-discovery
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
   config-server:
     container_name: 'mssc-config-server_dc'
@@ -49,6 +51,7 @@ services:
       - eureka
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_PROFILES_ACTIVE: local-discovery
   inventory-failover:
     container_name: 'inventory-failover_dc'
@@ -60,6 +63,7 @@ services:
       - zipkin
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
   inventory-service:
@@ -75,6 +79,7 @@ services:
       - zipkin
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
       SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
@@ -82,6 +87,7 @@ services:
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+    restart: on-failure
   beer-service:
     container_name: 'beer-service_dc'
     image: jimartin7/mssc-beer-service
@@ -97,6 +103,7 @@ services:
       - zipkin
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
       SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
@@ -105,6 +112,7 @@ services:
       SFG_BREWERY_BEERINVENTORYSERVICEHOST: http://inventory-service:8082
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+    restart: on-failure
   beer-order-service:
     container_name: 'beer-order-service_dc'
     image: jimartin7/mssc-beer-order-service
@@ -120,6 +128,7 @@ services:
       - zipkin
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
       SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
@@ -128,3 +137,4 @@ services:
       SFG_BREWERY_BEERSERVICEHOST: http://beer-service:8080
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+    restart: on-failure
