@@ -10,6 +10,11 @@ services:
       MYSQL_ROOT_PASSWORD: 'root' # TODO: Change this
     volumes:
       - /home/nacho/mysql/data:/var/lib/mysql
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
   jms-server:
     container_name: 'activemq_artemis_dc'
     image: vromero/activemq-artemis
@@ -19,16 +24,31 @@ services:
     environment:
       ARTEMIS_USERNAME: admin
       ARTEMIS_PASSWORD: admin
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
   zipkin:
     container_name: 'zipkin_dc'
     image: openzipkin/zipkin
     ports:
       - 9411:9411
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 100M
   eureka:
     container_name: 'mssc-brewery-eureka_dc'
     image: jimartin7/mssc-brewery-eureka
     ports:
       - 8761:8761
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
   mssc-gateway:
     container_name: 'mssc-gateway_dc'
     image: jimartin7/mssc-brewery-gateway
@@ -42,6 +62,12 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
       EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      SPRING_ZIPKIN_ENABLED: "false"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
   config-server:
     container_name: 'mssc-config-server_dc'
     image: jimartin7/mssc-config-server
@@ -53,6 +79,11 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
       EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_PROFILES_ACTIVE: local-discovery
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 100M
   inventory-failover:
     container_name: 'inventory-failover_dc'
     image: jimartin7/mssc-inventory-failover
@@ -66,10 +97,17 @@ services:
       EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_ZIPKIN_ENABLED: "false"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 100M
   inventory-service:
-    container_name: 'beer-inventory-service_dc'
+#    container_name: 'beer-inventory-service_dc'
     image: jimartin7/mssc-beer-inventory-service
     ports:
+#      - 8082-8085:8082
       - 8082:8082
     depends_on:
       - sql-server
@@ -87,7 +125,35 @@ services:
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_ZIPKIN_ENABLED: "false"
     restart: on-failure
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
+#  inventory-service-2:
+#    container_name: 'beer-inventory-service_2_dc'
+#    image: jimartin7/mssc-beer-inventory-service
+#    ports:
+#      - 7872:8082
+#    depends_on:
+#      - sql-server
+#      - eureka
+#      - config-server
+#      - jms-server
+#      - zipkin
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://netflix:eureka@eureka:8761/eureka/
+#      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
+#      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+#      SPRING_ARTEMIS_BROKERURL: tcp://jms-server:61616
+#      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+#      SPRING_DATASOURCE_URL: jdbc:mysql://sql-server:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+#      SPRING_CLOUD_CONFIG_ENABLED: 'true'
+#      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+#    restart: on-failure
   beer-service:
     container_name: 'beer-service_dc'
     image: jimartin7/mssc-beer-service
@@ -112,7 +178,13 @@ services:
       SFG_BREWERY_BEERINVENTORYSERVICEHOST: http://inventory-service:8082
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_ZIPKIN_ENABLED: "false"
     restart: on-failure
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
   beer-order-service:
     container_name: 'beer-order-service_dc'
     image: jimartin7/mssc-beer-order-service
@@ -137,4 +209,10 @@ services:
       SFG_BREWERY_BEERSERVICEHOST: http://beer-service:8080
       SPRING_CLOUD_CONFIG_ENABLED: 'true'
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_ZIPKIN_ENABLED: "false"
     restart: on-failure
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 200M
