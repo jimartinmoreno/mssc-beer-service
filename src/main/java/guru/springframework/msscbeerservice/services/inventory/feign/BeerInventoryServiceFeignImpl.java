@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Solo se usa si usamos service dicovery
+ * Solo se usa si usamos service dicovery con eureka
  */
 @Profile("local-discovery")
 @Slf4j

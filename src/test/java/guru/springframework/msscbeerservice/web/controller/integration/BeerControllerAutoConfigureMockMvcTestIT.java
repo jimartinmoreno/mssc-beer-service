@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.web.controller;
+package guru.springframework.msscbeerservice.web.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.sfg.brewery.model.BeerDto;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //@ActiveProfiles(value = {"localmysql"})
-class BeerControllerAutoConfigureMockMvcTest {
+class BeerControllerAutoConfigureMockMvcTestIT {
 
     @Autowired
     MockMvc mockMvc;

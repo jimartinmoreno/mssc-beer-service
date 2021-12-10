@@ -1,7 +1,8 @@
-package guru.springframework.msscbeerservice.web.controller;
+package guru.springframework.msscbeerservice.web.controller.integration;
 
 import guru.sfg.brewery.model.BeerDto;
 import guru.springframework.msscbeerservice.services.beer.BeerService;
+import guru.springframework.msscbeerservice.web.controller.BeerController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //        @SpyBean(BeerService.class),
 //})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class BeerControllerSpyTest {
+class BeerControllerSpyTestIT {
 
     @Autowired
     BeerController controller;
