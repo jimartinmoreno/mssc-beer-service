@@ -13,11 +13,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Created by jt on 2019-05-12.
- */
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/")
 @RestController
@@ -29,7 +28,35 @@ public class BeerController {
 
     private final BeerService beerService;
 
+    @GetMapping(produces = {"application/json"}, path = "beersss")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<BeerDto>> listBeersss(@RequestParam(value = "beerName", required = false) String beerName,
+                                                     @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
+        log.debug("listBeersss - beerName: " + beerName);
+        log.debug("listBeersss - showInventoryOnHand: " + showInventoryOnHand);
+
+        List<BeerDto> beerList = beerService.listBeers(beerName, showInventoryOnHand);
+
+        log.debug("listBeersss - beerList: " + beerList);
+        return new ResponseEntity<>(beerList, HttpStatus.OK);
+    }
+
+    @GetMapping(produces = {"application/json"}, path = "beers")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<BeerDto>> listBeers2(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                    @RequestParam(value = "beerName", required = false) String beerName,
+                                                    @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
+                                                    @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
+
+        List<BeerDto> beerList = Objects.requireNonNull(listBeers(pageNumber, pageSize, beerName, beerStyle, showInventoryOnHand).getBody()).toList();
+
+        log.debug("listBeers2 - beerList: " + beerList);
+        return new ResponseEntity<>(beerList, HttpStatus.OK);
+    }
+
     @GetMapping(produces = {"application/json"}, path = "beer")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
@@ -50,6 +77,7 @@ public class BeerController {
 
         BeerPagedList beerList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize), showInventoryOnHand);
 
+        log.debug("listBeers - beerList: " + beerList);
         log.debug("listBeers - beerList: " + beerList.getContent());
         return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
@@ -70,6 +98,11 @@ public class BeerController {
         return new ResponseEntity<>(beerService.getByUpc(upc), HttpStatus.OK);
     }
 
+    /**
+     * @param beerDto Beer data
+     * @param errors  Stores and exposes information about data-binding and validation errors for a specific object.
+     * @return
+     */
     @PostMapping(path = "beer")
     public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto, Errors errors) {
         log.info(" saveNewBeer - beerDto: " + beerDto);
@@ -78,6 +111,12 @@ public class BeerController {
         return new ResponseEntity<>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
 
+    /**
+     * @param beerId  Beer UUID
+     * @param beerDto Beer data
+     * @param errors  Stores and exposes information about data-binding and validation errors for a specific object.
+     * @return
+     */
     @PutMapping("beer/{beerId}")
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto, Errors errors) {
         log.info(" updateBeerById - beerId: " + beerId);
@@ -87,5 +126,4 @@ public class BeerController {
 
         return new ResponseEntity<>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
     }
-
 }

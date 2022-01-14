@@ -6,10 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
+/**
+ * Solo se usa si usamos service discovery con eureka
+ */
+@Profile("local-discovery")
 @Configuration
 @Slf4j
 public class FeignClientConfig {
+
 
     @Bean
     public RequestInterceptor requestInterceptor(@Value("${sfg.brewery.inventory-user:good}") String inventoryUser,
@@ -17,6 +23,7 @@ public class FeignClientConfig {
         return requestTemplate -> {
             requestTemplate.header("user", inventoryUser);
             requestTemplate.header("password", inventoryPassword);
+            // requestTemplate.header("Accept", ContentType.APPLICATION_JSON.getMimeType());
 
             requestTemplate.queries().entrySet().forEach(entry -> log.debug("Query - " + entry.getKey() +"= " + entry.getValue()));
             requestTemplate.headers().entrySet().forEach(entry -> log.debug("Header - " + entry.getKey() +"= " + entry.getValue()));

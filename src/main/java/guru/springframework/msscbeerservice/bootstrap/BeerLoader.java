@@ -21,6 +21,7 @@ public class BeerLoader implements CommandLineRunner {
     public static final String BEER_1_UPC = "0631234200036";
     public static final String BEER_2_UPC = "0631234300019";
     public static final String BEER_3_UPC = "0083783375213";
+    public static final String PRICE = "12.95";
 
     private final BeerRepository beerRepository;
 
@@ -39,7 +40,7 @@ public class BeerLoader implements CommandLineRunner {
                 .beerStyle(BeerStyleEnum.IPA.name())
                 .minOnHand(12)
                 .quantityToBrew(200)
-                .price(new BigDecimal("12.95"))
+                .price(new BigDecimal(PRICE))
                 .upc(BEER_1_UPC)
                 .build();
 
@@ -48,7 +49,7 @@ public class BeerLoader implements CommandLineRunner {
                 .beerStyle(BeerStyleEnum.PALE_ALE.name())
                 .minOnHand(12)
                 .quantityToBrew(200)
-                .price(new BigDecimal("12.95"))
+                .price(new BigDecimal(PRICE))
                 .upc(BEER_2_UPC)
                 .build();
 
@@ -57,7 +58,7 @@ public class BeerLoader implements CommandLineRunner {
                 .beerStyle(BeerStyleEnum.PALE_ALE.name())
                 .minOnHand(12)
                 .quantityToBrew(200)
-                .price(new BigDecimal("12.95"))
+                .price(new BigDecimal(PRICE))
                 .upc(BEER_3_UPC)
                 .build();
 

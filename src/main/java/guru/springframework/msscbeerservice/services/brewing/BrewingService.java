@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Async Service que simula una nueva petición para fabricar mas cerveza si el inventario es inferior al minimo configurado
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

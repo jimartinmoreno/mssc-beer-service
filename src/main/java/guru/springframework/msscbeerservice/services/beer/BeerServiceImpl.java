@@ -15,11 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by jt on 2019-06-06.
- */
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -73,6 +71,24 @@ public class BeerServiceImpl implements BeerService {
         }
         log.debug("listBeers - beerPagedList: " + beerPagedList.getContent());
         return beerPagedList;
+    }
+
+    @Override
+    public List<BeerDto> listBeers(String beerName, Boolean showInventoryOnHand) {
+        log.debug("listBeers - beerName: " + beerName);
+        List<Beer> beerList = beerRepository.findAllByBeerName(beerName);
+        List<BeerDto> beerDtoList = null;
+        if (showInventoryOnHand) {
+            beerDtoList = beerList.stream()
+                    .map(beerMapper::beerToBeerDtoWithInventory)
+                    .toList();
+        } else {
+            beerDtoList = beerList.stream()
+                    .map(beerMapper::beerToBeerDto)
+                    .toList();
+        }
+        log.debug("listBeers - beerDtoList: " + beerDtoList);
+        return beerDtoList;
     }
 
     @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false")

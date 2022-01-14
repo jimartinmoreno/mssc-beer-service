@@ -20,7 +20,9 @@ import java.util.UUID;
 
 /**
  * @Profile("!local-discovery") Solo se usa si no usamos service dicovery
- * ignoreUnknownFields = true ->Flag to indicate that when binding to this object unknown fields should be ignored. An unknown field could be a sign of a mistake in the Properties.
+ * prefix = The prefix of the properties that are valid to bind to this object.
+ * ignoreUnknownFields = true -> Flag to indicate that when binding to this object unknown fields should be ignored.
+ * An unknown field could be a sign of a mistake in the Properties.
  */
 @Profile("!local-discovery")
 @Slf4j
@@ -28,6 +30,7 @@ import java.util.UUID;
 @Component
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService, BeerInventoryServiceConstants {
 
+    // Synchronous client to perform HTTP requests
     private final RestTemplate restTemplate;
 
     private String beerInventoryServiceHost;
@@ -35,6 +38,9 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
     /**
      * @Value Annotation used at the field or method/constructor parameter level that indicates a default value expression
      * for the annotated element.
+     * <p>
+     * A common use case is to inject values using #{systemProperties.myProp} style SpEL (Spring Expression Language) expressions.
+     * Alternatively, values may be injected using ${my.app.myProp} style property placeholders.
      */
     public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder,
                                                 @Value("${sfg.brewery.inventory-user}") String inventoryUser,

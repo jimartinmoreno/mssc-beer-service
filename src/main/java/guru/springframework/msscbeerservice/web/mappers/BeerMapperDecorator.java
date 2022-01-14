@@ -6,11 +6,9 @@ import guru.springframework.msscbeerservice.services.inventory.BeerInventoryServ
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Created by jt on 2019-06-08.
- */
 @Slf4j
 public abstract class BeerMapperDecorator implements BeerMapper {
+
     private BeerInventoryService beerInventoryService;
     private BeerMapper mapper;
 

@@ -19,8 +19,8 @@ public class BeerOrderValidator {
 
         AtomicInteger beersNotFound = new AtomicInteger();
 
-        beerOrderDto.getBeerOrderLines().forEach(orderlineDto -> {
-            if (beerRepository.findByUpc(orderlineDto.getUpc()) == null) {
+        beerOrderDto.getBeerOrderLines().forEach(orderLineDto -> {
+            if (beerRepository.findByUpc(orderLineDto.getUpc()) == null) {
                 beersNotFound.incrementAndGet();
             }
         });

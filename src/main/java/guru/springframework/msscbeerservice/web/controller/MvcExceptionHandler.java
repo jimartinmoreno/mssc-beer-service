@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jt on 2019-05-25.
+ * Gestiona las excepciones del tipo ConstraintViolationException
  */
 @ControllerAdvice
 public class MvcExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<List> validationErrorHandler(ConstraintViolationException ex) {
+        System.out.println("######### ex = " + ex);
+
         List<String> errorsList = new ArrayList<>(ex.getConstraintViolations().size());
 
         ex.getConstraintViolations().forEach(error -> errorsList.add(error.toString()));

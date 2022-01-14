@@ -8,7 +8,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * Lo necesitamos para que se ejecute el servicio BrewingService cada cierto intervalo de manera asincrona
+ * Habilitamos ejecuciones asincronas y programadas y definimos un TaskExecutor para ejecutar tareas asincronas en otros
+ * hilos
+ *
+ * @EnableAsync Lo necesitamos para que se ejecute el servicio BrewingService cada cierto intervalo de manera asincrona
+ * @EnableScheduling Enables Spring's scheduled task execution capability
  */
 @EnableAsync
 @EnableScheduling
@@ -17,6 +21,6 @@ public class TaskConfig {
 
     @Bean
     TaskExecutor taskExecutor() {
-        return new SimpleAsyncTaskExecutor();
+        return new SimpleAsyncTaskExecutor(); // Create a new SimpleAsyncTaskExecutor with default thread name prefix.
     }
 }
