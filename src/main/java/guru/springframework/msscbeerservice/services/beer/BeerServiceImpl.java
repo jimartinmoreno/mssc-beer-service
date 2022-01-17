@@ -49,25 +49,14 @@ public class BeerServiceImpl implements BeerService {
         }
 
         if (showInventoryOnHand) {
-            beerPagedList = new BeerPagedList(beerPage
-                    .getContent()
-                    .stream()
-                    .map(beerMapper::beerToBeerDtoWithInventory)
-                    .toList(),
-//                    PageRequest.of(beerPage.getPageable().getPageNumber(),
-//                            beerPage.getPageable().getPageSize()),
-                    beerPage.getPageable(),
-                    beerPage.getTotalElements());
+            beerPagedList = new BeerPagedList(beerPage.getContent().stream()
+                    .map(beerMapper::beerToBeerDtoWithInventory).toList(),
+                    //                    PageRequest.of(beerPage.getPageable().getPageNumber(), beerPage.getPageable().getPageSize()),
+                    beerPage.getPageable(), beerPage.getTotalElements());
         } else {
-            beerPagedList = new BeerPagedList(beerPage
-                    .getContent()
-                    .stream()
-                    .map(beerMapper::beerToBeerDto)
-                    .toList(),
-//                    PageRequest.of(beerPage.getPageable().getPageNumber(),
-//                            beerPage.getPageable().getPageSize()),
-                    beerPage.getPageable(),
-                    beerPage.getTotalElements());
+            beerPagedList = new BeerPagedList(beerPage.getContent().stream().map(beerMapper::beerToBeerDto).toList(),
+                    //                    PageRequest.of(beerPage.getPageable().getPageNumber(), beerPage.getPageable().getPageSize()),
+                    beerPage.getPageable(), beerPage.getTotalElements());
         }
         log.debug("listBeers - beerPagedList: " + beerPagedList.getContent());
         return beerPagedList;
@@ -80,12 +69,10 @@ public class BeerServiceImpl implements BeerService {
         List<BeerDto> beerDtoList = null;
         if (showInventoryOnHand) {
             beerDtoList = beerList.stream()
-                    .map(beerMapper::beerToBeerDtoWithInventory)
-                    .toList();
+                    .map(beerMapper::beerToBeerDtoWithInventory).toList();
         } else {
             beerDtoList = beerList.stream()
-                    .map(beerMapper::beerToBeerDto)
-                    .toList();
+                    .map(beerMapper::beerToBeerDto).toList();
         }
         log.debug("listBeers - beerDtoList: " + beerDtoList);
         return beerDtoList;
@@ -97,14 +84,12 @@ public class BeerServiceImpl implements BeerService {
         log.debug("getById - beerId: " + beerId);
         log.debug("getById - showInventoryOnHand: " + showInventoryOnHand);
         if (showInventoryOnHand) {
-            return beerMapper.beerToBeerDtoWithInventory(
-                    beerRepository.findById(beerId).orElseThrow(NotFoundException::new)
-            );
+            return beerMapper.beerToBeerDtoWithInventory(beerRepository.findById(beerId)
+                    .orElseThrow(NotFoundException::new));
         } else {
             log.debug("getById - beerRepository.findById: " + beerRepository.findById(beerId));
-            return beerMapper.beerToBeerDto(
-                    beerRepository.findById(beerId).orElseThrow(NotFoundException::new)
-            );
+            return beerMapper.beerToBeerDto(beerRepository.findById(beerId)
+                    .orElseThrow(NotFoundException::new));
         }
     }
 
@@ -121,7 +106,8 @@ public class BeerServiceImpl implements BeerService {
     public BeerDto updateBeer(UUID beerId, BeerDto beerDto) {
         log.debug("updateBeer - beerId: " + beerId);
         log.debug("updateBeer - beerDto: " + beerDto);
-        Beer beer = beerRepository.findById(beerId).orElseThrow(NotFoundException::new);
+        Beer beer = beerRepository.findById(beerId)
+                .orElseThrow(NotFoundException::new);
 
         beer.setBeerName(beerDto.getBeerName());
         beer.setBeerStyle(beerDto.getBeerStyle().name());

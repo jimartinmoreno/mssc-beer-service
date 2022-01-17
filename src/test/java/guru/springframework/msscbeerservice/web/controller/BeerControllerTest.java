@@ -80,22 +80,17 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-
         given(beerService.getById(any(), anyBoolean())).willReturn(getValidBeerDto());
-
         mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID().toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
     }
 
     @Test
     void saveNewBeer() throws Exception {
-
         BeerDto beerDto = getValidBeerDto();
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
-
-        given(beerService.saveNewBeer(any())).willReturn(getValidBeerDto());
+        given(beerService.saveNewBeer(any())).willReturn(beerDto);
 
         mockMvc.perform(post("/api/v1/beer/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,9 +101,8 @@ class BeerControllerTest {
 
     @Test
     void updateBeerById() throws Exception {
-        given(beerService.updateBeer(any(), any())).willReturn(getValidBeerDto());
-
         BeerDto beerDto = getValidBeerDto();
+        given(beerService.updateBeer(any(), any())).willReturn(beerDto);
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
 
         mockMvc.perform(put("/api/v1/beer/" + UUID.randomUUID().toString())

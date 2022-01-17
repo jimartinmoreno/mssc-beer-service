@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * COnfiguración que habilita el service discovery client
+ * Configuración que habilita el service discovery client
  */
 @Profile("local-discovery")
 @EnableDiscoveryClient

@@ -8,11 +8,12 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 /**
- * Configuramos la configuración JMS y definimos un messageConverter para los mensajes(events) que publicamos en las colas
+ * Definimos la configuración JMS y definimos un messageConverter para los mensajes(events) que publicamos en las colas
  */
 @Configuration
 public class JmsConfig {
 
+    // Colas
     public static final String BREWING_REQUEST_QUEUE = "brewing-request";
     public static final String NEW_INVENTORY_QUEUE = "new-inventory";
     public static final String VALIDATE_ORDER_QUEUE = "validate-order";

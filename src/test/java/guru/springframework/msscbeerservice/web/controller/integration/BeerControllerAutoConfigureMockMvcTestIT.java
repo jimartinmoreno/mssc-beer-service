@@ -36,7 +36,6 @@ class BeerControllerAutoConfigureMockMvcTestIT {
         mockMvc.perform(get("/api/v1/beer/0a818933-087d-47f2-ad83-2f986ed087eb")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
     }
 
     @Test

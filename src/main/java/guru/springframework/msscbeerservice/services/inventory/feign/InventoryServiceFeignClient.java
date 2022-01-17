@@ -23,7 +23,7 @@ import java.util.UUID;
 
 // En esta configuración se usa el gateway
 // url an absolute URL or resolvable hostname (the protocol is optional).
-//@FeignClient(name = "inventory-service", url = "http://localhost:9090", fallback = BeerInventoryServiceFeignClientFailover.class,
+// @FeignClient(name = "inventory-service", url = "http://localhost:9090", fallback = BeerInventoryServiceFeignClientFailover.class,
 //        configuration = FeignClientConfig.class)
 
 public interface InventoryServiceFeignClient {

@@ -30,20 +30,20 @@ public class BeerController {
 
     @GetMapping(produces = {"application/json"}, path = "beersss")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<BeerDto>> listBeersss(@RequestParam(value = "beerName", required = false) String beerName,
+    public ResponseEntity<List<BeerDto>> listBeers2(@RequestParam(value = "beerName", required = false) String beerName,
                                                      @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
-        log.debug("listBeersss - beerName: " + beerName);
-        log.debug("listBeersss - showInventoryOnHand: " + showInventoryOnHand);
+        log.debug("listBeers2 - beerName: " + beerName);
+        log.debug("listBeers2 - showInventoryOnHand: " + showInventoryOnHand);
 
         List<BeerDto> beerList = beerService.listBeers(beerName, showInventoryOnHand);
 
-        log.debug("listBeersss - beerList: " + beerList);
+        log.debug("listBeers2 - beerList: " + beerList);
         return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
 
     @GetMapping(produces = {"application/json"}, path = "beers")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<BeerDto>> listBeers2(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+    public ResponseEntity<List<BeerDto>> listBeers3(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                     @RequestParam(value = "beerName", required = false) String beerName,
                                                     @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
@@ -51,7 +51,7 @@ public class BeerController {
 
         List<BeerDto> beerList = Objects.requireNonNull(listBeers(pageNumber, pageSize, beerName, beerStyle, showInventoryOnHand).getBody()).toList();
 
-        log.debug("listBeers2 - beerList: " + beerList);
+        log.debug("listBeers3 - beerList: " + beerList);
         return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
 
@@ -63,9 +63,9 @@ public class BeerController {
                                                    @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle,
                                                    @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
 
-//        if (showInventoryOnHand == null) {
-//            showInventoryOnHand = false;
-//        }
+        //        if (showInventoryOnHand == null) {
+        //            showInventoryOnHand = false;
+        //        }
 
         if (pageNumber == null || pageNumber < 0) {
             pageNumber = DEFAULT_PAGE_NUMBER;
@@ -104,7 +104,7 @@ public class BeerController {
      * @return
      */
     @PostMapping(path = "beer")
-    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto, Errors errors) {
+    public ResponseEntity<BeerDto> saveNewBeer(@RequestBody @Validated BeerDto beerDto, Errors errors) {
         log.info(" saveNewBeer - beerDto: " + beerDto);
         log.info(" saveNewBeer - errors: " + errors.hasErrors());
         errors.getAllErrors().forEach(System.out::println);
@@ -118,7 +118,7 @@ public class BeerController {
      * @return
      */
     @PutMapping("beer/{beerId}")
-    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto, Errors errors) {
+    public ResponseEntity<BeerDto> updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto, Errors errors) {
         log.info(" updateBeerById - beerId: " + beerId);
         log.info(" updateBeerById - beerDto: " + beerDto);
         log.info(" updateBeerById - errors: " + errors.hasErrors());

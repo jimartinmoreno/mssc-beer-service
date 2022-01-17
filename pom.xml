@@ -29,6 +29,7 @@
             <version>2.2.9.RELEASE</version>
         </dependency>
 
+        <!--    Client-Side Load-Balancing with Spring Cloud LoadBalancer    -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>

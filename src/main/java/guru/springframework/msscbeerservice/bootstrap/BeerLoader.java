@@ -28,7 +28,7 @@ public class BeerLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("run beer count: " + beerRepository.count());
-        if (beerRepository.count() == 0) {
+        if (beerRepository.count() == 0) { // Check there is no beers in the repository
             loadBeerObjects();
         }
     }
@@ -69,6 +69,5 @@ public class BeerLoader implements CommandLineRunner {
         log.info("Created beer : " + b1);
         log.info("Created beer : " + b2);
         log.info("Created beer : " + b3);
-
     }
 }

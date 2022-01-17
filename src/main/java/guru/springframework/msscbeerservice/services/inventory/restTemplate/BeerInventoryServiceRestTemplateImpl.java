@@ -33,6 +33,7 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
     // Synchronous client to perform HTTP requests
     private final RestTemplate restTemplate;
 
+    // Lo inyecta Spring desde application.properties
     private String beerInventoryServiceHost;
 
     /**
@@ -43,11 +44,9 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
      * Alternatively, values may be injected using ${my.app.myProp} style property placeholders.
      */
     public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder,
-                                                @Value("${sfg.brewery.inventory-user}") String inventoryUser,
-                                                @Value("${sfg.brewery.inventory-password}") String inventoryPassword) {
-
-        this.restTemplate = restTemplateBuilder
-                .basicAuthentication(inventoryUser, inventoryPassword).build();
+                                                @Value("${sfg.brewery.inventory-user}") String user,
+                                                @Value("${sfg.brewery.inventory-password}") String password) {
+        this.restTemplate = restTemplateBuilder.basicAuthentication(user, password).build();
     }
 
     public void setBeerInventoryServiceHost(String beerInventoryServiceHost) {
@@ -59,8 +58,7 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
 
         log.debug("Calling Inventory Service");
         ResponseEntity<List<BeerInventoryDto>> responseEntity = restTemplate
-                .exchange(beerInventoryServiceHost + BeerInventoryServiceConstants.INVENTORY_PATH, HttpMethod.GET,
-                        null,
+                .exchange(beerInventoryServiceHost + BeerInventoryServiceConstants.INVENTORY_PATH, HttpMethod.GET, null,
                         new ParameterizedTypeReference<List<BeerInventoryDto>>() {
                         },
                         beerId);
@@ -69,7 +67,7 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
         Integer onHand = Objects.requireNonNull(responseEntity.getBody()).stream()
                 .mapToInt(BeerInventoryDto::getQuantityOnHand)
                 .sum();
-        log.debug("getOnhandInventory onHand: " + onHand);
+        log.debug("getOnhandInventory QuantityOnHand: " + onHand);
         return onHand;
     }
 }

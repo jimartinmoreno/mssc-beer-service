@@ -12,7 +12,7 @@ import java.util.List;
  * Interfaz que define el feign client para la gestion del failover
  * @FeignClient Annotation for interfaces declaring that a REST client with that interface should be created
  */
-///inventory-failover
+// inventory-failover
 @FeignClient(name = "inventory-failover")
 public interface InventoryFailoverFeignClient {
 

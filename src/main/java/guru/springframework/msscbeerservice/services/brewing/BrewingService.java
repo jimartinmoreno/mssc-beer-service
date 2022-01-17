@@ -27,6 +27,9 @@ public class BrewingService {
     private final JmsTemplate jmsTemplate;
     private final BeerMapper beerMapper;
 
+    /**
+     * Async task that request a new brewing when MinOnHand() >= inventory
+     */
     @Scheduled(fixedRate = 60000) //every 60 seconds
     public void checkForLowInventory() {
         List<Beer> beers = beerRepository.findAll();

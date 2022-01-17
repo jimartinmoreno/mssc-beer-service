@@ -29,9 +29,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 /**
  * @RestClientTest Annotation for a Spring rest client test that focuses only on beans that use RestTemplateBuilder.
  * Using this annotation will disable full auto-configuration and instead apply only configuration relevant to rest client tests
- * @AutoConfigureJsonTesters Lo necesitas para poder usar los JacksonTester
+ * @AutoConfigureJsonTesters Lo necesitas para poder usar los JacksonTester. Annotation that can be applied to a test class to enable
+ * and configure auto-configuration of JSON testers.
  */
-//@Disabled // utility for manual testing
+// @Disabled // utility for manual testing
 @RestClientTest(BeerInventoryService.class)
 @AutoConfigureJsonTesters
 class BeerInventoryServiceRestTemplateImplTest {
@@ -39,6 +40,9 @@ class BeerInventoryServiceRestTemplateImplTest {
     @Autowired
     BeerInventoryService beerInventoryService;
 
+    /**
+     * Mock rest server
+     */
     @Autowired
     private MockRestServiceServer server;
 
@@ -61,11 +65,12 @@ class BeerInventoryServiceRestTemplateImplTest {
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
-        String detailsString = objectMapper.writeValueAsString(getValidBeerInventoryDtoList());
-        this.server
-                .expect(requestToUriTemplate("http://localhost:8082/api/v1/beer/{beerId}/inventory",
-                        "45772dd4-3e82-4d49-9951-4b4d8d3a0a1b"))
-                .andRespond(withSuccess(detailsString, MediaType.APPLICATION_JSON));
+        //Mock JSON answer
+        String beerInventoryList = objectMapper.writeValueAsString(getValidBeerInventoryDtoList());
+
+        //Mock the answer to the rest request
+        this.server.expect(requestToUriTemplate("http://localhost:7777/api/v1/beer/{beerId}/inventory", "45772dd4-3e82-4d49-9951-4b4d8d3a0a1b"))
+                .andRespond(withSuccess(beerInventoryList, MediaType.APPLICATION_JSON));
     }
 
     /**
@@ -85,16 +90,15 @@ class BeerInventoryServiceRestTemplateImplTest {
      * Necesita estar arrancado el servicio destino
      */
     @Test
-    void restTemplateClientInventoryArrayTest() throws IOException {
+    void restTemplateClientInventoryArrayIT() throws IOException {
 
-        String result = "[{\"id\":\"7aa9d132-4c66-11ec-81d3-0242ac130003\",\"createdDate\":\"2021-11-23T16:01:00Z\",\"lastModifiedDate\":\"2021-11-23T16:01:00Z\",\"beerId\":\"45772dd4-3e82-4d49-9951-4b4d8d3a0a1b\",\"upc\":\"0083783375213\",\"quantityOnHand\":5}]";
+        //String result = "[{\"id\":\"7aa9d132-4c66-11ec-81d3-0242ac130003\",\"createdDate\":\"2021-11-23T16:01:00Z\",\"lastModifiedDate\":\"2021-11-23T16:01:00Z\",\"beerId\":\"45772dd4-3e82-4d49-9951-4b4d8d3a0a1b\",\"upc\":\"0083783375213\",\"quantityOnHand\":5}]";
 
         //Basic Auth
         final TestRestTemplate template = new TestRestTemplate("good", "beer");
 
         ResponseEntity<BeerInventoryDto[]> responseEntity = template
-                .getForEntity("http://localhost:8082/api/v1/beer/{beerId}/inventory", BeerInventoryDto[].class,
-                        "45772dd4-3e82-4d49-9951-4b4d8d3a0a1b");
+                .getForEntity("http://localhost:8082/api/v1/beer/{beerId}/inventory", BeerInventoryDto[].class, "45772dd4-3e82-4d49-9951-4b4d8d3a0a1b");
 
 
         System.out.println("responseEntity = " + responseEntity);
@@ -114,6 +118,7 @@ class BeerInventoryServiceRestTemplateImplTest {
 
         BeerInventoryDto[] beerInventoryDtos = objectMapper.readValue(resultObtained, BeerInventoryDto[].class);
         System.out.println("beerInventoryDtos = " + beerInventoryDtos);
+
         assertThat(HttpStatus.OK).isEqualTo(responseEntity.getStatusCode());
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody().length).isPositive();
@@ -133,7 +138,7 @@ class BeerInventoryServiceRestTemplateImplTest {
      * Es un test de integración que llama al servicio real desde un cliente TestRestTemplate
      */
     @Test
-    void restTemplateClientInventoryListTest() throws IOException {
+    void restTemplateClientInventoryListIT() throws IOException {
 
         String result = "[{\"id\":\"7aa9d132-4c66-11ec-81d3-0242ac130003\",\"createdDate\":\"2021-11-23T16:01:00Z\",\"lastModifiedDate\":\"2021-11-23T16:01:00Z\",\"beerId\":\"45772dd4-3e82-4d49-9951-4b4d8d3a0a1b\",\"upc\":\"0083783375213\",\"quantityOnHand\":5}]";
 
@@ -161,10 +166,11 @@ class BeerInventoryServiceRestTemplateImplTest {
 
         String resultObtained = objectMapper.writeValueAsString(responseEntity.getBody());
         System.out.println("resultObtained = " + resultObtained);
-        //assertThat(result).isEqualTo(resultObtained);
 
         BeerInventoryDto[] beerInventoryDtos = objectMapper.readValue(resultObtained, BeerInventoryDto[].class);
         System.out.println("beerInventoryDtos = " + beerInventoryDtos);
+
+        //assertThat(result).isEqualTo(resultObtained);
         assertThat(HttpStatus.OK).isEqualTo(responseEntity.getStatusCode());
         assertThat(responseEntity.getBody()).isNotNull();
         assertThat(responseEntity.getBody().size()).isPositive();
